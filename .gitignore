@@ -1,0 +1,52 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+
+*.log
+
+# --- Virtual Environment ---
+venv/
+env/
+ENV/
+*.env
+*.venv
+.Python
+
+# --- Django ---
+*.pot
+*.pyc
+*.mo
+*.log
+
+media/
+staticfiles/
+local_settings.py
+
+# --- IDE / Editor ---
+.vscode/
+.idea/
+*.swp
+*~
+
+
+
+# --- Testing / Coverage ---
+.coverage
+.tox/
+pytest_cache/
+htmlcov/
+.coverage.*
+.pytest_cache/
+.cache/
+
+# --- Jupyter / Notebooks ---
+.ipynb_checkpoints/
+*.ipynb
+
+# --- Build / Packaging ---
+*.egg-info/
+dist/
+bu
