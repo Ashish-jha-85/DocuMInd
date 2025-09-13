@@ -11,10 +11,13 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+MEDIA_URL = "/uploads/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -29,12 +32,24 @@ ALLOWED_HOSTS = ["*"]
 
 # Allow all origins (for development only)
 CORS_ALLOW_ALL_ORIGINS = True
-
+CORS_ALLOW_CREDENTIALS = True
 # Or, safer: allow only your frontend host
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:3000",
 #     "http://127.0.0.1:3000",
 # ]
+
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=7),  # 7 days access token
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),  # optional, refresh token longer
+    "ROTATE_REFRESH_TOKENS": True,  # refresh token rotates on refresh
+    "BLACKLIST_AFTER_ROTATION": True,  # blacklist old refresh tokens
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -49,12 +64,17 @@ INSTALLED_APPS = [
     "documents",
     "rest_framework",
     "corsheaders",
+    "cloudinary",
+    "cloudinary_storage",
 ]
+
 AUTH_USER_MODEL = "users.User"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,  # default items per page
 }
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",

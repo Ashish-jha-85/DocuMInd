@@ -1,7 +1,12 @@
 from django.urls import path, include
 from .views import SemanticSearchAPIView
 from rest_framework.routers import DefaultRouter
-from .views import DocumentViewSet, DocumentEmbeddingViewSet, AccessLogViewSet
+from .views import (
+    DocumentViewSet,
+    DocumentEmbeddingViewSet,
+    AccessLogViewSet,
+    DocumentStatsAPIView,
+)
 
 router = DefaultRouter()
 router.register(r"documents", DocumentViewSet)
@@ -11,4 +16,5 @@ router.register(r"accesslogs", AccessLogViewSet)
 urlpatterns = [
     path("documents/search/", SemanticSearchAPIView.as_view(), name="semantic-search"),
     path("", include(router.urls)),
+    path("stats/", DocumentStatsAPIView.as_view(), name="document-stats"),
 ]

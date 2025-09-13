@@ -12,6 +12,14 @@ class Document(models.Model):
         ("Invoices", "Invoices"),
         ("Unknown", "Unknown"),
     ]
+    FILE_TYPE_CHOICES = [
+        ("pdf", "PDF"),
+        ("docx", "DOCX"),
+        ("doc", "DOC"),
+        ("txt", "TXT"),
+        ("csv", "CSV"),
+        ("other", "Other"),
+    ]
     title = models.CharField(max_length=255, blank=True, null=True)
     category = models.CharField(
         max_length=50,
@@ -20,10 +28,13 @@ class Document(models.Model):
         blank=True,
         default="Unknown",  # default if category not detected
     )
+    file_type = models.CharField(
+        max_length=10, choices=FILE_TYPE_CHOICES, default="other"
+    )
     author = models.CharField(max_length=255, blank=True, null=True)
     date = models.DateField(blank=True, null=True)
     uploader = models.ForeignKey(User, on_delete=models.CASCADE)
-    file = models.FileField(upload_to="uploads/")
+    file = models.FileField(upload_to="")
     summary = models.TextField(blank=True, null=True)
     entities = models.JSONField(blank=True, null=True)  # store extracted entities
     created_at = models.DateTimeField(auto_now_add=True)
