@@ -41,6 +41,8 @@ class DocumentEmbedding(models.Model):
 
 class AccessLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    document = models.ForeignKey(Document, on_delete=models.CASCADE)
-    action = models.CharField(max_length=50)  # e.g. "upload", "view", "download"
+    document = models.ForeignKey(
+        Document, on_delete=models.CASCADE, null=True, blank=True  # 👈 important
+    )
+    action = models.CharField(max_length=50)  # e.g. upload, view, login, logout
     timestamp = models.DateTimeField(auto_now_add=True)

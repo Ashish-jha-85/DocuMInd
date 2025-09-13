@@ -25,9 +25,16 @@ SECRET_KEY = "django-insecure-1-x(&)$4tj@xbmy6h&x222rle-vy6y(a%-@66lzpa_q_97#__2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
+# Allow all origins (for development only)
+CORS_ALLOW_ALL_ORIGINS = True
 
+# Or, safer: allow only your frontend host
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+# ]
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,12 +45,19 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "users",
+    "rest_framework.authtoken",
     "documents",
     "rest_framework",
+    "corsheaders",
 ]
 AUTH_USER_MODEL = "users.User"
-
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
