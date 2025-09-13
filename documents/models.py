@@ -10,9 +10,16 @@ class Document(models.Model):
         ("Contracts", "Contracts"),
         ("Tech", "Technical Reports"),
         ("Invoices", "Invoices"),
+        ("Unknown", "Unknown"),
     ]
     title = models.CharField(max_length=255, blank=True, null=True)
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    category = models.CharField(
+        max_length=50,
+        choices=CATEGORY_CHOICES,
+        null=True,
+        blank=True,
+        default="Unknown",  # default if category not detected
+    )
     author = models.CharField(max_length=255, blank=True, null=True)
     date = models.DateField(blank=True, null=True)
     uploader = models.ForeignKey(User, on_delete=models.CASCADE)

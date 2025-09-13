@@ -10,10 +10,22 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from sentence_transformers import SentenceTransformer
 from .models import Document, DocumentEmbedding
+from transformers import pipeline
+
 
 # Load NLP models only once
 nlp = spacy.load("en_core_web_sm")
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
+classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+CATEGORIES = [
+    "Finance",
+    "HR",
+    "Legal",
+    "Contracts",
+    "Technical Reports",
+    "Invoices",
+    "Unknown",
+]
 
 
 def extract_text(file_path):
@@ -86,13 +98,15 @@ def process_document(sender, instance, created, **kwargs):
     if created:  # only on first save
         file_path = instance.file.path
         text = extract_text(file_path)
-
         if not text:
             return
 
         title, author, date, entities = extract_metadata(text)
         summary = summarize_text(text)
-
+        # --- 1. Classification ---
+        classification = classifier(text, candidate_labels=CATEGORIES)
+        predicted_category = classification["labels"][0]  # top predicted label
+        instance.category = predicted_category
         # Update metadata
         instance.title = title or instance.title
         instance.author = author or instance.author
