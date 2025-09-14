@@ -16,6 +16,7 @@ import pandas as pd
 # Load NLP models only once
 nlp = spacy.load("en_core_web_sm")
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
+
 classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 CATEGORIES = [
     "Finance",
@@ -49,8 +50,7 @@ def extract_text(file_path, file_type):
             df = pd.read_csv(file_path, encoding="utf-8", errors="ignore")
             text = " ".join(df.astype(str).apply(lambda row: " ".join(row), axis=1))
         else:
-            # --- EDIT: If type is "other", do nothing ---
-            return ""  # Skip processing
+            return ""
     except Exception as e:
         print(f"Error reading {file_path}: {e}")
     return text.strip()

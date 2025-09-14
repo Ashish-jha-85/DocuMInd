@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,6 +20,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_URL = "/uploads/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 
+load_dotenv(os.path.join(BASE_DIR, ".env"))
+
+GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -29,7 +33,7 @@ SECRET_KEY = "django-insecure-1-x(&)$4tj@xbmy6h&x222rle-vy6y(a%-@66lzpa_q_97#__2
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
+X_FRAME_OPTIONS = "SAMEORIGIN"
 # Allow all origins (for development only)
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
@@ -66,6 +70,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "cloudinary",
     "cloudinary_storage",
+    "chatbot",
 ]
 
 AUTH_USER_MODEL = "users.User"

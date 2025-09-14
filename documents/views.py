@@ -9,6 +9,9 @@ import pickle
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.decorators import action
+from rest_framework.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .serializers import (
     DocumentSerializer,
@@ -123,6 +126,25 @@ class DocumentViewSet(viewsets.ModelViewSet):
             user=self.request.user, document=instance, action="delete"
         )
         instance.delete()
+
+    def pdf(self, request, pk=None):
+        # Authenticate manually using token from query param
+        token = request.query_params.get("token")
+        if not token:
+            raise AuthenticationFailed("Token required")
+
+        user, _ = JWTAuthentication().get_user(
+            validated_token=JWTAuthentication().get_validated_token(token)
+        )
+        request.user = user
+
+        doc = self.get_object()
+        file_path = doc.file.path
+        if not os.path.exists(file_path):
+            return Response({"error": "File not found"}, status=404)
+
+        AccessLog.objects.create(user=user, document=doc, action="view")
+        return FileResponse(open(file_path, "rb"), content_type="application/pdf")
 
 
 class DocumentEmbeddingViewSet(viewsets.ModelViewSet):
