@@ -19,12 +19,10 @@ embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
 classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 CATEGORIES = [
-    "Finance",
-    "HR",
-    "Legal",
-    "Contracts",
-    "Technical Reports",
-    "Invoices",
+    "Finance - budgets, invoices, balance sheets, tax documents, audit reports, payroll, expense reports",
+    "HR - employee records, resumes, leave policies, training manuals, performance reviews, recruitment documents, policy handbooks",
+    "Legal - contracts, compliance, court documents, intellectual property, NDAs, regulatory filings, legal opinions, arbitration cases",
+    "Tech - research, engineering, scientific papers, design documents, feasibility studies, patents, lab reports, system architecture",
     "Unknown",
 ]
 
@@ -126,7 +124,13 @@ def process_document(sender, instance, created, **kwargs):
         # Classification
         classification = classifier(text, candidate_labels=CATEGORIES)
         predicted_category = classification["labels"][0]
-        instance.category = predicted_category
+        instance.category = (
+            predicted_category.split(" - ")[0] if predicted_category else "Unknown"
+        )
+        print(
+            predicted_category.split(" - ")[0],
+            predicted_category.split(" - ")[0] if predicted_category else "Unknown",
+        )
 
         # Update metadata
         instance.title = title or instance.title

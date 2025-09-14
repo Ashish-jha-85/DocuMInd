@@ -22,6 +22,7 @@ ENV/
 *.log
 
 media/
+uploads/
 staticfiles/
 local_settings.py
 
@@ -50,3 +51,6 @@ htmlcov/
 *.egg-info/
 dist/
 bu
+.db
+/uploads
+.pdf

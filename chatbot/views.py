@@ -100,4 +100,5 @@ def create_session(request):
             }
         )
     except Exception as e:
+        print(e)
         return Response({"error": str(e)}, status=400)

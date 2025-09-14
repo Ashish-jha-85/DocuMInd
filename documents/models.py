@@ -7,9 +7,7 @@ class Document(models.Model):
         ("Finance", "Finance"),
         ("HR", "HR"),
         ("Legal", "Legal"),
-        ("Contracts", "Contracts"),
         ("Tech", "Technical Reports"),
-        ("Invoices", "Invoices"),
         ("Unknown", "Unknown"),
     ]
     FILE_TYPE_CHOICES = [

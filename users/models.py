@@ -8,7 +8,6 @@ class User(AbstractUser):
         ("HR", "HR"),
         ("Finance", "Finance"),
         ("Legal", "Legal"),
-        ("Contracts", "Contracts"),
         ("Tech", "Technical Reports"),
     ]
     role = models.CharField(max_length=50, choices=ROLE_CHOICES, default="HR")
